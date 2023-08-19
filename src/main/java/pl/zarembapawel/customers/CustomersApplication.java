@@ -2,8 +2,9 @@ package pl.zarembapawel.customers;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import pl.zarembapawel.customers.config.MapperConfig;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "pl.zarembapawel.customers")
 public class CustomersApplication {
 
 	public static void main(String[] args) {

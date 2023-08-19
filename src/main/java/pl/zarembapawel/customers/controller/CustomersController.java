@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import pl.zarembapawel.customers.model.Customer;
 import pl.zarembapawel.customers.service.CustomersService;
 
@@ -23,7 +24,11 @@ public class CustomersController {
 
     @GetMapping("/{customerId}")
     public Customer getCustomer(@PathVariable Integer customerId) {
-        return service.getCustomer(customerId);
+        Customer customer = service.getCustomer(customerId);
+        if (customer == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        return customer;
     }
 
     @PostMapping
@@ -40,7 +45,7 @@ public class CustomersController {
 
     @DeleteMapping("/{customerId}")
     public ResponseEntity<Void> delete(@PathVariable Integer customerId) {
-        service.delete(customerId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        HttpStatus status = service.delete(customerId);
+        return new ResponseEntity<>(status);
     }
 }

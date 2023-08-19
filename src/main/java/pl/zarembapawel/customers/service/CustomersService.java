@@ -47,6 +47,7 @@ public class CustomersService {
             return HttpStatus.CONFLICT;
         }
         customer.setDateAdd(LocalDateTime.now());
+        customer.setDateUpdate(LocalDateTime.now());
         CustomerEntity entity = mapper.map(customer, CustomerEntity.class);
         repository.save(entity);
         log.info("Customer has been added");
@@ -54,10 +55,12 @@ public class CustomersService {
     }
 
     public HttpStatus update(Integer id, Customer customer) {
-        log.info("Adding customer ID: {}: {}", id, customer);
+        log.info("Updating customer ID: {}: {}", id, customer);
         Optional<CustomerEntity> entity = repository.findById(id);
         if (entity.isPresent()) {
             customer.setId(id);
+            customer.setDateAdd(entity.get().getDateAdd());
+            customer.setDateUpdate(LocalDateTime.now());
             CustomerEntity newEntity = mapper.map(customer, CustomerEntity.class);
             repository.save(newEntity);
             log.info("Customer has been updated");
@@ -67,14 +70,21 @@ public class CustomersService {
         return HttpStatus.NOT_FOUND;
     }
 
-    public void delete(Integer id) {
+    public HttpStatus delete(Integer id) {
         log.info("Deleting customer ID: {}", id);
-        repository.deleteById(id);
+        Optional<CustomerEntity> entity = repository.findById(id);
+        if (entity.isPresent()) {
+            repository.deleteById(id);
+            log.info("Customer has been deleted");
+            return HttpStatus.NO_CONTENT;
+        }
+        log.error("Customer not found");
+        return HttpStatus.NOT_FOUND;
     }
 
     private boolean isCustomerExist(Customer customer) {
         CustomerEntity entity = repository.findByEmailOrPhoneNumber(customer.getEmail(),
                                                                     customer.getPhoneNumber());
-        return entity == null;
+        return entity != null;
     }
 }

@@ -1,5 +1,6 @@
 package pl.zarembapawel.customers.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Customer {
 
     private Integer id;
@@ -24,4 +26,5 @@ public class Customer {
     @NotNull
     private String address;
     private LocalDateTime dateAdd;
+    private LocalDateTime dateUpdate;
 }
