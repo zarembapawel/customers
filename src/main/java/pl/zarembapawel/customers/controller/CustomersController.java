@@ -2,7 +2,6 @@ package pl.zarembapawel.customers.controller;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.zarembapawel.customers.model.Customer;
@@ -31,5 +30,17 @@ public class CustomersController {
     public ResponseEntity<Void> add(@RequestBody Customer customer) {
         HttpStatus status = service.add(customer);
         return new ResponseEntity<>(status);
+    }
+
+    @PutMapping("/{customerId}")
+    public ResponseEntity<Void> update(@PathVariable Integer customerId, @RequestBody Customer customer) {
+        HttpStatus status = service.update(customerId, customer);
+        return new ResponseEntity<>(status);
+    }
+
+    @DeleteMapping("/{customerId}")
+    public ResponseEntity<Void> delete(@PathVariable Integer customerId) {
+        service.delete(customerId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
